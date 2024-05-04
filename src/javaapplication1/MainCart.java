@@ -43,8 +43,8 @@ public class MainCart extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         Available_Balance = new javax.swing.JTextField();
         Remaining_Balance = new javax.swing.JTextField();
-        Pin = new javax.swing.JTextField();
         Pay = new javax.swing.JButton();
+        Pin = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -145,12 +145,6 @@ public class MainCart extends javax.swing.JFrame {
             }
         });
 
-        Pin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                PinActionPerformed(evt);
-            }
-        });
-
         Pay.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         Pay.setText("Click to Pay");
         Pay.addActionListener(new java.awt.event.ActionListener() {
@@ -178,8 +172,8 @@ public class MainCart extends javax.swing.JFrame {
                             .addComponent(Total_Price)
                             .addComponent(Available_Balance, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
                             .addComponent(Remaining_Balance, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
-                            .addComponent(Pin, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
-                            .addComponent(Pay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(Pay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Pin))
                         .addGap(35, 35, 35)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 807, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
@@ -232,10 +226,10 @@ public class MainCart extends javax.swing.JFrame {
                             .addComponent(jLabel8)
                             .addComponent(Remaining_Balance, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel10)
-                            .addComponent(Pin, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(48, 48, 48)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Pin))
+                        .addGap(53, 53, 53)
                         .addComponent(Pay)))
                 .addContainerGap(97, Short.MAX_VALUE))
         );
@@ -344,40 +338,48 @@ public class MainCart extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_Remaining_BalanceActionPerformed
 
-    private void PinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PinActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_PinActionPerformed
-
     private void PayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PayActionPerformed
         // TODO add your handling code here:
         String getPassword = getMd5(Pin.getText());
-//        Total = Integer.parseInt(Total_Price.getText());
-//        Amount = Integer.parseInt(Available_Balance.getText());
         try{
             ClientPreparedStatement pst1 = (ClientPreparedStatement) con.prepareStatement("select * from customer where customer_id=? and password=?");
             pst1.setInt(1,c_id);
             pst1.setString(2, getPassword);
             ResultSetImpl rs = (ResultSetImpl) pst1.executeQuery();
-            while(rs.next()){
-                JOptionPane.showMessageDialog(null,"Payment Successfull");
-                  try{
-                    ClientPreparedStatement pst = (ClientPreparedStatement) con.prepareStatement("update payment set amount = ? where c_id=?");
-                    pst.setInt(1,remain);
-                      System.out.println(remain);
-                    pst.setInt(2, c_id);
-                    pst.executeQuery();
-//                    ClientPreparedStatement pst1 = (ClientPreparedStatement) con.prepareStatement("delete from cart where c_id=?");
-//                    pst1.setInt(1, c_id);
-//                    pst1.executeQuery();
-                    render();
-                }catch(SQLException e){
-                }
+            if(rs.next()){
+//                reset();
+                JOptionPane.showMessageDialog(null,"Payment Successfull");  
+                MainPage mp = new MainPage();
+                mp.setVisible(true);
+                dispose();
             }
             
         }catch(SQLException e){
+            System.out.println("pay");
         }
     }//GEN-LAST:event_PayActionPerformed
+    void reset(){
+        try{
+            ClientPreparedStatement pst = (ClientPreparedStatement) con.prepareStatement("update payment set amount = ? where c_id=?");
+            pst.setInt(1,remain);
+            pst.setInt(2, c_id);
+            pst.executeQuery();
+            }catch(SQLException e){
+                    System.out.println("update reset");
+            }
+        try{
+            ClientPreparedStatement pst1 = (ClientPreparedStatement) con.prepareStatement("delete from cart where c_id=?");
+            pst1.setInt(1, c_id);
+            pst1.executeQuery();   
+        }catch(SQLException ex){
+            System.out.println("delete reset");
+        }finally{
+            render();
+        } 
+    }
+    
     public void render(){
+        remain = 0;
         try{
             ClientPreparedStatement pst1 = (ClientPreparedStatement) con.prepareStatement("select p_id,p_name,p_price,quantity from cart where c_id=?");
             pst1.setInt(1,c_id);
@@ -422,7 +424,7 @@ public class MainCart extends javax.swing.JFrame {
             Available_Balance.setText(""+Amount+" - "+Total);
             Remaining_Balance.setText(""+(Amount-Total));
             remain = Amount-Total;
-            System.out.println(remain);
+            
         }catch(SQLException e){
         }
         Total = 0;
@@ -467,7 +469,7 @@ public class MainCart extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField Available_Balance;
     private javax.swing.JButton Pay;
-    private javax.swing.JTextField Pin;
+    private javax.swing.JPasswordField Pin;
     private javax.swing.JTextField Remaining_Balance;
     private javax.swing.JTextField Total_Price;
     private javax.swing.JButton decreament;

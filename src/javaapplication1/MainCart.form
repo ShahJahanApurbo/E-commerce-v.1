@@ -39,8 +39,8 @@
                           <Component id="Total_Price" max="32767" attributes="0"/>
                           <Component id="Available_Balance" pref="299" max="32767" attributes="0"/>
                           <Component id="Remaining_Balance" pref="299" max="32767" attributes="0"/>
-                          <Component id="Pin" pref="299" max="32767" attributes="0"/>
                           <Component id="Pay" max="32767" attributes="0"/>
+                          <Component id="Pin" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
                       <Component id="jScrollPane2" min="-2" pref="807" max="-2" attributes="0"/>
@@ -108,11 +108,11 @@
                           <Component id="Remaining_Balance" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="Pin" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="jLabel10" max="32767" attributes="0"/>
+                          <Component id="Pin" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
                       <Component id="Pay" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -280,11 +280,6 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Remaining_BalanceActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="Pin">
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="PinActionPerformed"/>
-      </Events>
-    </Component>
     <Component class="javax.swing.JButton" name="Pay">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -295,6 +290,8 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="PayActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JPasswordField" name="Pin">
     </Component>
   </SubComponents>
 </Form>
